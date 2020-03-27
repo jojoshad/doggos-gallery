@@ -3,20 +3,20 @@
     <TheNavigation />
 
     <v-content>
-      <HelloWorld />
+      <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+// import HelloWorld from "./components/HelloWorld";
 import TheNavigation from "./components/TheNavigation";
 
 export default {
   name: "App",
 
   components: {
-    HelloWorld,
+    // HelloWorld,
     TheNavigation
   },
 
@@ -26,5 +26,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
