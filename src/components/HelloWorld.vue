@@ -214,11 +214,6 @@ export default {
         href: "https://vuetifyjs.com/getting-started/frequently-asked-questions"
       }
     ]
-  }),
-  mounted() {
-    this.$dogApi.get("breeds/list/all").then(response => {
-      console.log(response.data.message);
-    });
-  }
+  })
 };
 </script>
