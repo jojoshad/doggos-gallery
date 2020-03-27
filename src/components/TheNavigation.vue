@@ -1,8 +1,10 @@
 <template>
   <v-app-bar app color="white" elevate-on-scroll>
-    <v-toolbar-title>
-      <div class="title"><span>&#128054;</span>Doggos as a service</div>
-    </v-toolbar-title>
+    <router-link :to="{ name: 'Home' }">
+      <v-toolbar-title>
+        <div class="title"><span>&#128054;</span>Doggos as a service</div>
+      </v-toolbar-title>
+    </router-link>
 
     <v-spacer></v-spacer>
 
