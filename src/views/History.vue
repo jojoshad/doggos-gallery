@@ -41,7 +41,7 @@ export default {
     clearHistory() {
       if (this.history) {
         // clear component data
-        this.history.splice(0)
+        this.history.splice(0);
         // clear local storage
         localStorage.removeItem("history");
       }

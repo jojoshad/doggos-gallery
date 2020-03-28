@@ -8,11 +8,11 @@
     ></v-progress-circular>
   </div>
 
-  <div v-else class="home">
+  <v-container v-else>
     <h1>Home - Breeds Gallery</h1>
     <DoggosGridGallery :breedsList="breedsList" />
     <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -29,9 +29,11 @@ export default {
   data: () => ({
     breedsList: undefined,
     loading: true
+    // loading: this.$store.state.loading
   }),
   mounted() {
     if (!this.$store.state.breedsList) {
+      // this.$store.dispatch("loadBreeds");
       this.$dogApi
         .get("breeds/list")
         .then(response => {

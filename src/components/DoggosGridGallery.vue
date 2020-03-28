@@ -13,7 +13,14 @@
       <template v-for="breed in breedsList">
         <v-col :key="breed" cols="12" sm="6" md="4" lg="3">
           <v-card class="mx-auto">
-            <v-img :src="getPicture(breed)" :alt="breed" height="200px" @click.stop="setDialog(breed)"></v-img>
+            <v-img :src="getPicture(breed)" :alt="breed" height="300px" @click.stop="setDialog(breed)">
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular indeterminate color="blue">
+                  </v-progress-circular>
+                </v-row>
+              </template>
+            </v-img>
 
             <v-card-title>
               {{ breed }}
