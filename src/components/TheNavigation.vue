@@ -29,9 +29,9 @@ export default {
   data() {
     return {
       search: ""
-    }
+    };
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

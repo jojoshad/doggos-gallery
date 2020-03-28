@@ -11,19 +11,16 @@
   <v-container v-else>
     <h1>Home - Breeds Gallery</h1>
     <DoggosGridGallery :breedsList="breedsList" />
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
   </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
 import DoggosGridGallery from "@/components/DoggosGridGallery.vue";
 
 export default {
   name: "Home",
   components: {
-    // HelloWorld,
     DoggosGridGallery
   },
   data: () => ({

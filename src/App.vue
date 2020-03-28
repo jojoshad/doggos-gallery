@@ -9,14 +9,12 @@
 </template>
 
 <script>
-// import HelloWorld from "./components/HelloWorld";
 import TheNavigation from "./components/TheNavigation";
 
 export default {
   name: "App",
 
   components: {
-    // HelloWorld,
     TheNavigation
   },
 

@@ -14,15 +14,33 @@
       </template>
     </v-img>
 
-    <v-card-title>
-      {{ dog.name }}
-    </v-card-title>
+    <router-link
+      v-if="parentBreed"
+      class="link"
+      :to="{ name: 'SubbreedPage', params: { subbreed: dog.name, parent: parentBreed } }"
+    >
+      <v-card-title>
+        {{ dog.name }}
+      </v-card-title>
+    </router-link>
 
-    <v-card-actions>
-      <v-btn color="purple" text>
-        Explore
-      </v-btn>
-    </v-card-actions>
+    <router-link
+      v-else
+      class="link"
+      :to="{ name: 'BreedPage', params: { breed: dog.name } }"
+    >
+      <v-card-title>
+        {{ dog.name }}
+      </v-card-title>
+    </router-link>
+
+    <!-- <v-card-actions>
+      <router-link class="link" :to="{ name: 'BreedPage', params: { breed: dog.name } }">
+        <v-btn color="purple" text>
+          Explore
+        </v-btn>
+      </router-link>
+    </v-card-actions> -->
   </v-card>
 </template>
 
@@ -35,6 +53,9 @@ export default {
     dog: {
       type: Object,
       required: true
+    },
+    parentBreed: {
+      type: String
     }
   },
   methods: {
@@ -44,3 +65,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.link {
+  color: black;
+  text-decoration: none;
+}
+</style>

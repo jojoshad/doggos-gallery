@@ -12,37 +12,10 @@
     <v-row v-else>
       <template v-for="breed in breedsList">
         <v-col :key="breed" cols="12" sm="6" md="4" lg="3">
-          <DoggoCard :dog="getDogData(breed)" @openModal="setDialog" />
-          <!-- <v-card class="mx-auto">
-            <v-img :src="getPicture(breed)" :alt="breed" height="300px" @click.stop="setDialog(breed)">
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular indeterminate color="blue">
-                  </v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
-
-            <v-card-title>
-              {{ breed }}
-            </v-card-title>
-
-            <v-card-actions>
-              <v-btn color="purple" text>
-                Explore
-              </v-btn>
-            </v-card-actions>
-          </v-card> -->
-
-          <!-- <v-btn
-      color="primary"
-      dark
-      @click.stop="dialog = true"
-    >
-      Open Dialog
-    </v-btn> -->
+          <DoggoCard :parentBreed="parentBreed" :dog="getDogData(breed)" @openModal="setDialog" />
         </v-col>
       </template>
+      <router-view :key="$route.path" :parentBreed="parentBreed" />
     </v-row>
     <v-dialog v-model="dialog.show" max-width="500px">
       <DialogContent :doggoPicture="dialog.data" />
@@ -70,6 +43,9 @@ export default {
     breedsList: {
       type: Array
       // required: true
+    },
+    parentBreed: {
+      type: String
     }
   },
   components: {
@@ -100,7 +76,7 @@ export default {
   methods: {
     getRandomPictureFromBreed(breed) {
       this.$dogApi
-        .get(`breed/${breed}/images/random`)
+        .get(`breed/${this.parentBreed ? this.parentBreed + '/' : ''}${breed}/images/random`)
         .then(response => {
           this.$set(this.breedsPictures, breed, response.data.message);
         })
