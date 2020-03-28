@@ -12,7 +12,8 @@
     <v-row v-else>
       <template v-for="breed in breedsList">
         <v-col :key="breed" cols="12" sm="6" md="4" lg="3">
-          <v-card class="mx-auto">
+          <DoggoCard :dog="getDogData(breed)" @openModal="setDialog" />
+          <!-- <v-card class="mx-auto">
             <v-img :src="getPicture(breed)" :alt="breed" height="300px" @click.stop="setDialog(breed)">
               <template v-slot:placeholder>
                 <v-row class="fill-height ma-0" align="center" justify="center">
@@ -31,7 +32,7 @@
                 Explore
               </v-btn>
             </v-card-actions>
-          </v-card>
+          </v-card> -->
 
           <!-- <v-btn
       color="primary"
@@ -51,6 +52,7 @@
 
 <script>
 import DialogContent from "./DialogContent";
+import DoggoCard from "./DoggoCard";
 
 export default {
   name: "DoggosGridGallery",
@@ -71,7 +73,8 @@ export default {
     }
   },
   components: {
-    DialogContent
+    DialogContent,
+    DoggoCard
   },
   mounted() {
     this.breedsList.forEach(breed => {
@@ -109,8 +112,10 @@ export default {
     getPicture(breed) {
       return this.breedsPictures[breed];
     },
-    setDialog(breed) {
-      const dogPicture = this.breedsPictures[breed];
+    getDogData(breed) {
+      return { name: breed, img: this.getPicture(breed) };
+    },
+    setDialog(dogPicture) {
       this.dialog.show = true;
       this.dialog.data = dogPicture;
 

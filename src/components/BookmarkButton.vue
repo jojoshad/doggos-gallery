@@ -1,5 +1,11 @@
 <template>
-  <v-btn class="btn" :key="doggoPicture" icon :color="bookmarked ? 'white' : 'pink'" @click="switchBookmarkState()">
+  <v-btn
+    class="btn"
+    :key="doggoPicture"
+    icon
+    :color="bookmarked ? 'white' : 'pink'"
+    @click="switchBookmarkState()"
+  >
     <v-icon class="btnIcon" v-if="bookmarked">mdi-check</v-icon>
     <v-icon class="btnIcon" v-else>mdi-heart</v-icon>
   </v-btn>

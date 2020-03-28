@@ -39,7 +39,6 @@ export default {
         .then(response => {
           this.$store.commit("setBreedsList", response.data.message);
           this.breedsList = response.data.message;
-          console.log(this.breedsList);
         })
         .catch(error => console.log(error))
         .finally(() => (this.loading = false));

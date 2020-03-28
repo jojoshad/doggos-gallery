@@ -26,9 +26,11 @@ export default {
 
   mounted() {
     if (localStorage.getItem("bookmarks")) {
-      console.log(localStorage.getItem("bookmarks"));
       try {
-        this.$store.commit("setBookmarks", JSON.parse(localStorage.getItem("bookmarks")));
+        this.$store.commit(
+          "setBookmarks",
+          JSON.parse(localStorage.getItem("bookmarks"))
+        );
       } catch (e) {
         localStorage.removeItem("bookmarks");
       }

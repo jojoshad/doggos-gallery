@@ -42,8 +42,6 @@ export default new Vuex.Store({
         .get("breeds/list")
         .then(response => {
           commit("setBreedsList", response.data.message);
-          // this.breedsList = response.data.message;
-          console.log(this.breedsList);
         })
         .catch(error => console.log(error))
         .finally(() => commit("setLoading", false));

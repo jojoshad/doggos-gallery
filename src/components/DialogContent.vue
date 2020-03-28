@@ -3,20 +3,6 @@
     <v-img :src="doggoPicture" alt="doggo">
       <BookmarkButton :doggoPicture="doggoPicture" class="bookmarkBtn" />
     </v-img>
-
-    <!-- <v-card-actions> -->
-      <!-- <v-spacer></v-spacer> -->
-
-      <!-- <BookmarkButton /> -->
-      <!-- <BookmarkButton class="bookmarkBtn" /> -->
-      <!-- <v-btn color="green darken-1" text @click="dialog = false">
-        Disagree
-      </v-btn>
-
-      <v-btn color="green darken-1" text @click="dialog = false">
-        Agree
-      </v-btn> -->
-    <!-- </v-card-actions> -->
   </v-card>
 </template>
 

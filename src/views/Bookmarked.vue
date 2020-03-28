@@ -11,7 +11,9 @@
         </template>
         <v-card>
           <v-card-title class="headline">Confirmation</v-card-title>
-          <v-card-text>Are you sure you want to get rid of ALL bookmarks?</v-card-text>
+          <v-card-text>
+            Are you sure you want to get rid of ALL bookmarks?
+          </v-card-text>
           <v-card-actions>
             <v-btn color="error" text @click="dialog = false">No</v-btn>
             <v-spacer></v-spacer>
@@ -24,7 +26,11 @@
       <template v-for="(dogPicture, index) in bookmarks">
         <v-col :key="index" cols="12" sm="6" md="4" lg="3">
           <v-card class="mx-auto">
-            <v-img :src="dogPicture" :alt="'dog-'+index" height="200px"></v-img>
+            <v-img
+              :src="dogPicture"
+              :alt="'dog-' + index"
+              height="300px"
+            ></v-img>
           </v-card>
         </v-col>
       </template>

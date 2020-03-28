@@ -9,9 +9,13 @@
     </div>
     <v-row>
       <template v-for="(dogPicture, index) in history">
-        <v-col :key="index" cols="12" sm="6" md="4" lg="3">
+        <v-col v-if="dogPicture" :key="index" cols="12" sm="6" md="4" lg="3">
           <v-card class="mx-auto">
-            <v-img :src="dogPicture" :alt="'dog-'+index" height="200px"></v-img>
+            <v-img
+              :src="dogPicture"
+              :alt="'dog-' + index"
+              height="300px"
+            ></v-img>
           </v-card>
         </v-col>
       </template>
