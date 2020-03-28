@@ -24,6 +24,16 @@
   </v-app-bar>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      search: ""
+    }
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 .title {
   span {

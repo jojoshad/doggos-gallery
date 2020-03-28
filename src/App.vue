@@ -26,4 +26,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+h1 {
+  text-align: center;
+  padding: 50px 0;
+}
+.loader {
+  text-align: center;
+}
+</style>
