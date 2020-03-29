@@ -23,16 +23,8 @@ export default {
   }),
 
   mounted() {
-    if (localStorage.getItem("bookmarks")) {
-      try {
-        this.$store.commit(
-          "setBookmarks",
-          JSON.parse(localStorage.getItem("bookmarks"))
-        );
-      } catch (e) {
-        localStorage.removeItem("bookmarks");
-      }
-    }
+    this.$store.dispatch("loadBookmarks");
+    this.$store.dispatch("loadHistory");
   }
 };
 </script>

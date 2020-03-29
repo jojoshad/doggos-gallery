@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     breedsList: undefined,
     bookmarks: undefined,
+    history,
     loading: false
   },
   mutations: {
@@ -28,10 +29,25 @@ export default new Vuex.Store({
     },
     clearBookmarks(state) {
       state.bookmarks.splice(0);
+    },
+    setHistory(state, history) {
+      state.history = history;
+    },
+    addToHistory(state, item) {
+      state.history.push(item);
+    },
+    removeFromHistory(state, item) {
+      state.history.splice(state.history.indexOf(item), 1);
+    },
+    clearHistory(state) {
+      state.history.splice(0);
     }
   },
   getters: {
     breedsList: state => state.breedsList,
+    isViewed: state => picture => {
+      return state.history.includes(picture);
+    },
     isBookmarked: state => picture => {
       return state.bookmarks.includes(picture);
     },
@@ -55,6 +71,29 @@ export default new Vuex.Store({
       // });
 
       commit("setBreedsList", breedsList);
+    },
+    loadBookmarks({ commit }) {
+      if (localStorage.getItem("bookmarks")) {
+        try {
+          commit("setBookmarks", JSON.parse(localStorage.getItem("bookmarks")));
+        } catch (e) {
+          localStorage.removeItem("bookmarks");
+        }
+      } else {
+        commit("setBookmarks", []);
+      }
+    },
+    loadHistory({ commit }) {
+      if (localStorage.getItem("history")) {
+        try {
+          console.log("wesh");
+          commit("setHistory", JSON.parse(localStorage.getItem("history")));
+        } catch (e) {
+          localStorage.removeItem("history");
+        }
+      } else {
+        commit("setHistory", []);
+      }
     }
   },
   modules: {}

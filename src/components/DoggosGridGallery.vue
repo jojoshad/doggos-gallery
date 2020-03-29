@@ -38,6 +38,8 @@
 <script>
 import DialogContent from "./DialogContent";
 import DoggoCard from "./DoggoCard";
+import dogData from "@/mixins/dogDataMixin";
+import localStorageMixin from "@/mixins/localStorageMixin";
 
 export default {
   name: "DoggosGridGallery",
@@ -48,8 +50,7 @@ export default {
     dialog: {
       show: false,
       data: undefined
-    },
-    history: []
+    }
   }),
   props: {
     breedsList: {
@@ -74,14 +75,6 @@ export default {
       });
     } else {
       this.loading = false;
-    }
-
-    if (localStorage.getItem("history")) {
-      try {
-        this.history = JSON.parse(localStorage.getItem("history"));
-      } catch (e) {
-        localStorage.removeItem("history");
-      }
     }
   },
   watch: {
@@ -113,26 +106,17 @@ export default {
     getPicture(breed) {
       return this.breedsPictures[breed];
     },
-    getDogData(breed) {
-      return { name: breed, img: this.getPicture(breed) };
-    },
-    getDogPicture(picture) {
-      return { img: picture };
-    },
     setDialog(dogPicture) {
       this.dialog.show = true;
       this.dialog.data = dogPicture;
 
-      if (!this.history.includes(dogPicture)) {
-        this.history.push(dogPicture);
+      if (!this.$store.getters.isViewed(dogPicture)) {
+        this.$store.commit("addToHistory", dogPicture);
       }
       this.saveHistory();
-    },
-    saveHistory() {
-      const parsed = JSON.stringify(this.history);
-      localStorage.setItem("history", parsed);
     }
-  }
+  },
+  mixins: [dogData, localStorageMixin]
 };
 </script>
 
