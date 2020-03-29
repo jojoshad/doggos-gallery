@@ -30,14 +30,9 @@ export default {
   }),
   mounted() {
     if (!this.$store.state.breedsList) {
-      // this.$store.dispatch("loadBreeds");
-      this.$dogApi
-        .get("breeds/list")
-        .then(response => {
-          this.$store.commit("setBreedsList", response.data.message);
-          this.breedsList = response.data.message;
-        })
-        .catch(error => console.log(error))
+      this.$store
+        .dispatch("loadBreeds")
+        .then(() => (this.breedsList = this.$store.state.breedsList))
         .finally(() => (this.loading = false));
     } else {
       this.breedsList = this.$store.state.breedsList;

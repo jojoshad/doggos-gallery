@@ -10,12 +10,24 @@
     </div>
 
     <v-row v-else>
-      <template v-for="breed in breedsList">
-        <v-col :key="breed" cols="12" sm="6" md="4" lg="3">
-          <DoggoCard :parentBreed="parentBreed" :dog="getDogData(breed)" @openModal="setDialog" />
-        </v-col>
+      <template v-if="pictures">
+        <template v-for="picture in pictures">
+          <v-col :key="picture" cols="12" sm="6" md="4" lg="3">
+            <DoggoCard :dog="getDogPicture(picture)" @openModal="setDialog" />
+          </v-col>
+        </template>
       </template>
-      <router-view :key="$route.path" :parentBreed="parentBreed" />
+      <template v-else>
+        <template v-for="breed in breedsList">
+          <v-col :key="breed" cols="12" sm="6" md="4" lg="3">
+            <DoggoCard
+              :parentBreed="parentBreed"
+              :dog="getDogData(breed)"
+              @openModal="setDialog"
+            />
+          </v-col>
+        </template>
+      </template>
     </v-row>
     <v-dialog v-model="dialog.show" max-width="500px">
       <DialogContent :doggoPicture="dialog.data" />
@@ -46,6 +58,9 @@ export default {
     },
     parentBreed: {
       type: String
+    },
+    pictures: {
+      type: Array
     }
   },
   components: {
@@ -53,9 +68,13 @@ export default {
     DoggoCard
   },
   mounted() {
-    this.breedsList.forEach(breed => {
-      this.getRandomPictureFromBreed(breed);
-    });
+    if (!this.pictures) {
+      this.breedsList.forEach(breed => {
+        this.getRandomPictureFromBreed(breed);
+      });
+    } else {
+      this.loading = false;
+    }
 
     if (localStorage.getItem("history")) {
       try {
@@ -76,7 +95,13 @@ export default {
   methods: {
     getRandomPictureFromBreed(breed) {
       this.$dogApi
-        .get(`breed/${this.parentBreed ? this.parentBreed + '/' : ''}${breed}/images/random`)
+        .get(
+          // if there's a parentBreed, fetch from subbreed
+          // otherwise just fetch from root breed
+          `breed/${
+            this.parentBreed ? this.parentBreed + "/" : ""
+          }${breed}/images/random`
+        )
         .then(response => {
           this.$set(this.breedsPictures, breed, response.data.message);
         })
@@ -90,6 +115,9 @@ export default {
     },
     getDogData(breed) {
       return { name: breed, img: this.getPicture(breed) };
+    },
+    getDogPicture(picture) {
+      return { img: picture };
     },
     setDialog(dogPicture) {
       this.dialog.show = true;

@@ -36,11 +36,9 @@ export default {
     switchBookmarkState() {
       if (!this.bookmarks.includes(this.doggoPicture)) {
         this.$store.commit("addBookmark", this.doggoPicture);
-        // this.bookmarks.push(this.doggoPicture);
         this.bookmarked = true;
       } else {
         this.$store.commit("removeBookmark", this.doggoPicture);
-        // this.bookmarks.splice(this.bookmarks.indexOf(this.doggoPicture), 1);
         this.bookmarked = false;
       }
       this.saveBookmarks();

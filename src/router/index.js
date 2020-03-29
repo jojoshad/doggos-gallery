@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import store from "@/store/index";
 
 Vue.use(VueRouter);
 
@@ -22,9 +23,28 @@ const routes = [
         name: "SubbreedPage",
         props: true,
         component: () =>
-          import(/* webpackChunkName: "details" */ "../views/SubbreedPage"),
+          import(/* webpackChunkName: "details" */ "../views/SubbreedPage")
       }
     ],
+    beforeEnter: (to, from, next) => {
+      if (!store.state.breedsList) {
+        store.dispatch("loadBreeds").then(() => {
+          const exists = store.getters.breedExists(to.params.breed);
+          if (exists) {
+            next();
+          } else {
+            next({ name: "NotFound" });
+          }
+        });
+      } else {
+        const exists = store.getters.breedExists(to.params.breed);
+        if (exists) {
+          next();
+        } else {
+          next({ name: "NotFound" });
+        }
+      }
+    }
   },
   {
     path: "/bookmarked",
@@ -37,6 +57,13 @@ const routes = [
     name: "History",
     component: () =>
       import(/* webpackChunkName: "history" */ "../views/History")
+  },
+  {
+    path: "/404",
+    alias: "*",
+    name: "NotFound",
+    component: () =>
+      import(/* webpackChunkName: "details" */ "../views/NotFound")
   }
 ];
 

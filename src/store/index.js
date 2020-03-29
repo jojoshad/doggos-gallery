@@ -34,17 +34,27 @@ export default new Vuex.Store({
     breedsList: state => state.breedsList,
     isBookmarked: state => picture => {
       return state.bookmarks.includes(picture);
+    },
+    breedExists: state => breed => {
+      if (!state.breedsList) {
+        return false;
+      }
+      return state.breedsList.includes(breed);
     }
   },
   actions: {
-    loadBreeds({ commit }) {
-      dogApi
+    async loadBreeds({ commit }) {
+      const breedsList = await dogApi
         .get("breeds/list")
         .then(response => {
-          commit("setBreedsList", response.data.message);
+          return response.data.message;
         })
-        .catch(error => console.log(error))
-        .finally(() => commit("setLoading", false));
+        .catch(error => console.log(error));
+      // .finally(() => {
+      //   commit("setLoading", false);
+      // });
+
+      commit("setBreedsList", breedsList);
     }
   },
   modules: {}

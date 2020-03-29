@@ -10,10 +10,7 @@
 
   <v-container v-else>
     <v-row>
-      <v-expansion-panels
-        flat
-        hover
-      >
+      <v-expansion-panels flat hover>
         <v-expansion-panel>
           <v-expansion-panel-header class="panel">
             <span class="panelTitle">The {{ title }} gallery</span>
@@ -23,17 +20,10 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-row>
-              <template v-for="(dogPicture, index) in breedPictures">
-                <v-col v-if="dogPicture" :key="index" cols="12" sm="6" md="4" lg="3">
-                  <v-card class="mx-auto">
-                    <v-img
-                      :src="dogPicture"
-                      :alt="'dog-' + index"
-                      height="300px"
-                    ></v-img>
-                  </v-card>
-                </v-col>
-              </template>
+              <DoggosGridGallery
+                v-if="breedPictures.length"
+                :pictures="breedPictures"
+              />
             </v-row>
           </v-expansion-panel-content>
         </v-expansion-panel>
@@ -41,7 +31,10 @@
     </v-row>
     <section>
       <h1>{{ title }} subbreeds</h1>
-      <DoggosGridGallery v-if="subbreeds.length" :parentBreed="breed" :breedsList="subbreeds" />
+      <template v-if="subbreeds">
+        <DoggosGridGallery :parentBreed="breed" :breedsList="subbreeds" />
+        <router-view :key="$route.path" :parentBreed="breed" />
+      </template>
       <h2 class="emptySub" v-else>No subbreeds for {{ breed }}</h2>
     </section>
   </v-container>
@@ -55,8 +48,9 @@ export default {
     return {
       breedPictures: [],
       subbreeds: undefined,
-      loading: true
-    }
+      loading: true,
+      amount: 12
+    };
   },
   props: {
     breed: {
@@ -73,12 +67,15 @@ export default {
     }
   },
   mounted() {
-    this.getRandomPictures(12);
+    // fetch pictures from component to let it decide the amount
+    this.getRandomPictures(this.amount);
 
     this.$dogApi
       .get(`/breed/${this.breed}/list`)
       .then(response => {
-        this.subbreeds = response.data.message;
+        if (response.data.message.length) {
+          this.subbreeds = response.data.message;
+        }
       })
       .catch(error => console.log(error))
       .finally(() => (this.loading = false));

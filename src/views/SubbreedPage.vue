@@ -10,60 +10,39 @@
 
   <v-container v-else>
     <section>
-      <v-expansion-panels
-        flat
-        hover
-      >
+      <v-expansion-panels flat hover>
         <v-expansion-panel>
           <v-expansion-panel-header class="panel">
-            <span class="panelTitle">{{ subbreed }} {{ parentBreed }}</span>
+            <span class="panelTitle">
+              {{ title(subbreed) }} {{ title(parentBreed) }}
+            </span>
             <template v-slot:actions>
               <v-icon color="primary" class="expandIcon">$expand</v-icon>
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-row>
-              <template v-for="(dogPicture, index) in pictures">
-                <v-col v-if="dogPicture" :key="index" cols="12" sm="6" md="4" lg="3">
-                  <v-card class="mx-auto">
-                    <v-img
-                      :src="dogPicture"
-                      :alt="'dog-' + index"
-                      height="300px"
-                    ></v-img>
-                  </v-card>
-                </v-col>
-              </template>
+            <v-row v-if="pictures.length">
+              <DoggosGridGallery :pictures="pictures" />
             </v-row>
+            <template v-else>
+              <h2>No pictures found for this subbreed</h2>
+            </template>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-      <!-- <h1>{{ subbreed }} {{ parentBreed }}</h1>
-      <v-row>
-        <template v-for="(dogPicture, index) in pictures">
-          <v-col v-if="dogPicture" :key="index" cols="12" sm="6" md="4" lg="3">
-            <v-card class="mx-auto">
-              <v-img
-                :src="dogPicture"
-                :alt="'dog-' + index"
-                height="300px"
-              ></v-img>
-            </v-card>
-          </v-col>
-        </template>
-      </v-row> -->
     </section>
   </v-container>
 </template>
 
 <script>
-// import DoggosGridGallery from "@/components/DoggosGridGallery";
+import DoggosGridGallery from "@/components/DoggosGridGallery";
 
 export default {
   data() {
     return {
       pictures: [],
-      loading: true
+      loading: true,
+      amount: 12
     };
   },
   props: {
@@ -76,30 +55,29 @@ export default {
       required: true
     }
   },
-  // components: {
-  //   DoggosGridGallery
-  // },
-  // computed: {
-  //   title: function() {
-  //     return this.breed.charAt(0).toUpperCase() + this.breed.substring(1);
-  //   }
-  // },
+  components: {
+    DoggosGridGallery
+  },
   mounted() {
-    this.getRandomPictures(12);
+    // fetch pictures from component to let it decide the amount
+    this.getRandomPictures(this.amount);
   },
   methods: {
     getRandomPictures(amount) {
       this.$dogApi
-        .get(`breed/${this.parentBreed}/${this.subbreed}/images/random/${amount}`)
+        .get(
+          `breed/${this.parentBreed}/${this.subbreed}/images/random/${amount}`
+        )
         .then(response => {
-          console.log(response.data.message);
           this.pictures = response.data.message;
-          console.log(this.pictures);
         })
         .catch(error => {
           console.log(error);
         })
         .finally((this.loading = false));
+    },
+    title: function(name) {
+      return name.charAt(0).toUpperCase() + name.substring(1);
     }
   }
 };
@@ -107,6 +85,10 @@ export default {
 
 <style lang="scss" scoped>
 .loader {
+  text-align: center;
+}
+h2 {
+  padding: 40px 0;
   text-align: center;
 }
 </style>

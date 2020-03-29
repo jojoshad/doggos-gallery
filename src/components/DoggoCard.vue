@@ -3,44 +3,51 @@
     <v-img
       :src="dog.img"
       :alt="dog.name"
+      @error="onErrorImg"
       height="300px"
       @click.stop="openModal()"
     >
       <template v-slot:placeholder>
         <v-row class="fill-height ma-0" align="center" justify="center">
-          <v-progress-circular indeterminate color="blue">
-          </v-progress-circular>
+          <v-progress-circular
+            v-if="!imgError"
+            indeterminate
+            color="blue"
+          ></v-progress-circular>
+          <div v-else>
+            <img :src="require(`@/assets/doge.jpg`)" alt="doge" />
+            <span class="imgText">
+              Couldn't load
+            </span>
+          </div>
         </v-row>
       </template>
     </v-img>
 
-    <router-link
-      v-if="parentBreed"
-      class="link"
-      :to="{ name: 'SubbreedPage', params: { subbreed: dog.name, parent: parentBreed } }"
-    >
-      <v-card-title>
-        {{ dog.name }}
-      </v-card-title>
-    </router-link>
-
-    <router-link
-      v-else
-      class="link"
-      :to="{ name: 'BreedPage', params: { breed: dog.name } }"
-    >
-      <v-card-title>
-        {{ dog.name }}
-      </v-card-title>
-    </router-link>
-
-    <!-- <v-card-actions>
-      <router-link class="link" :to="{ name: 'BreedPage', params: { breed: dog.name } }">
-        <v-btn color="purple" text>
-          Explore
-        </v-btn>
+    <template v-if="dog.name">
+      <router-link
+        v-if="parentBreed"
+        class="link"
+        :to="{
+          name: 'SubbreedPage',
+          params: { subbreed: dog.name, parent: parentBreed }
+        }"
+      >
+        <v-card-title>
+          {{ dog.name }}
+        </v-card-title>
       </router-link>
-    </v-card-actions> -->
+
+      <router-link
+        v-else
+        class="link"
+        :to="{ name: 'BreedPage', params: { breed: dog.name } }"
+      >
+        <v-card-title>
+          {{ dog.name }}
+        </v-card-title>
+      </router-link>
+    </template>
   </v-card>
 </template>
 
@@ -48,7 +55,9 @@
 export default {
   name: "DoggoCard",
 
-  data: () => ({}),
+  data: () => ({
+    imgError: false
+  }),
   props: {
     dog: {
       type: Object,
@@ -60,7 +69,13 @@ export default {
   },
   methods: {
     openModal() {
-      this.$emit("openModal", this.dog.img);
+      // can't open modal for a wrong img
+      if (!this.imgError) {
+        this.$emit("openModal", this.dog.img);
+      }
+    },
+    onErrorImg() {
+      this.imgError = true;
     }
   }
 };
@@ -69,6 +84,16 @@ export default {
 <style lang="scss" scoped>
 .link {
   color: black;
+  text-decoration: none;
+}
+.imgText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
   text-decoration: none;
 }
 </style>
