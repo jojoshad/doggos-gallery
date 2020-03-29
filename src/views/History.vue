@@ -19,7 +19,11 @@
         </v-col>
       </template>
       <v-col class="colPos" cols="12" sm="6" md="4" lg="3">
-        <mugen-scroll class="centeredText" :handler="addPictures" :should-handle="!loading">
+        <mugen-scroll
+          class="centeredText"
+          :handler="addPictures"
+          :should-handle="!loading"
+        >
           <div v-if="loading">Loading...</div>
           <div v-else>That's it!</div>
         </mugen-scroll>
