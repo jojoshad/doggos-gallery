@@ -10,7 +10,15 @@
 
     <router-link :to="{ name: 'Bookmarked' }">
       <v-btn text small>
-        <v-icon color="red">mdi-heart</v-icon>
+        <v-badge
+          :content="$store.getters.bookmarkCount"
+          :value="$store.getters.bookmarkCount"
+          color="red"
+          overlap
+          left
+        >
+          <v-icon color="red">mdi-heart</v-icon>
+        </v-badge>
         <span class="mr-2">Bookmarked</span>
       </v-btn>
     </router-link>

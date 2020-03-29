@@ -21,6 +21,11 @@
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
+            <v-row justify="center">
+              <div class="refreshBtnContainer">
+                <NewBatchButton @getNewBatch="getNewBatch" />
+              </div>
+            </v-row>
             <v-row v-if="pictures.length">
               <DoggosGridGallery :pictures="pictures" />
             </v-row>
@@ -36,6 +41,7 @@
 
 <script>
 import DoggosGridGallery from "@/components/DoggosGridGallery";
+import NewBatchButton from "@/components/NewBatchButton";
 
 export default {
   data() {
@@ -56,22 +62,30 @@ export default {
     }
   },
   components: {
-    DoggosGridGallery
+    DoggosGridGallery,
+    NewBatchButton
   },
   mounted() {
     // fetch pictures from component to let it decide the amount
-    this.getRandomPictures(this.amount);
+    this.getRandomPictures();
   },
   methods: {
-    getRandomPictures(amount) {
+    getRandomPictures() {
       this.$dogApi
         .get(
-          `breed/${this.parentBreed}/${this.subbreed}/images/random/${amount}`
+          `breed/${this.parentBreed}/${this.subbreed}/images/random/${this.amount}`
         )
         .then(response => {
           this.pictures = response.data.message;
         })
         .finally((this.loading = false));
+    },
+    getNewBatch() {
+      if (this.pictures.length < this.amount) {
+        this.$emit("showSnackBar");
+      } else {
+        this.getRandomPictures();
+      }
     },
     title: function(name) {
       return name.charAt(0).toUpperCase() + name.substring(1);
@@ -87,5 +101,8 @@ export default {
 h2 {
   padding: 40px 0;
   text-align: center;
+}
+.refreshBtnContainer {
+  padding: 40px 0;
 }
 </style>

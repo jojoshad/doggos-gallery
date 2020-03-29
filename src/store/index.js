@@ -8,13 +8,9 @@ export default new Vuex.Store({
   state: {
     breedsList: undefined,
     bookmarks: undefined,
-    history,
-    loading: false
+    history
   },
   mutations: {
-    setLoading(state, flag) {
-      state.loading = flag;
-    },
     setBreedsList(state, breedsList) {
       state.breedsList = breedsList;
     },
@@ -56,7 +52,8 @@ export default new Vuex.Store({
         return false;
       }
       return state.breedsList.includes(breed);
-    }
+    },
+    bookmarkCount: state => (state.bookmarks ? state.bookmarks.length : 0)
   },
   actions: {
     async loadBreeds({ commit }) {
