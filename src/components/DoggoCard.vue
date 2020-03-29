@@ -1,0 +1,99 @@
+<template>
+  <v-card class="mx-auto">
+    <v-img
+      :src="dog.img"
+      :alt="dog.name"
+      @error="onErrorImg"
+      height="300px"
+      @click.stop="openModal()"
+    >
+      <template v-slot:placeholder>
+        <v-row class="fill-height ma-0" align="center" justify="center">
+          <v-progress-circular
+            v-if="!imgError"
+            indeterminate
+            color="blue"
+          ></v-progress-circular>
+          <div v-else>
+            <img :src="require(`@/assets/doge.jpg`)" alt="doge" />
+            <span class="imgText">
+              Couldn't load
+            </span>
+          </div>
+        </v-row>
+      </template>
+    </v-img>
+
+    <template v-if="dog.name">
+      <router-link
+        v-if="parentBreed"
+        class="link"
+        :to="{
+          name: 'SubbreedPage',
+          params: { subbreed: dog.name, parent: parentBreed }
+        }"
+      >
+        <v-card-title>
+          {{ dog.name }}
+        </v-card-title>
+      </router-link>
+
+      <router-link
+        v-else
+        class="link"
+        :to="{ name: 'BreedPage', params: { breed: dog.name } }"
+      >
+        <v-card-title>
+          {{ dog.name }}
+        </v-card-title>
+      </router-link>
+    </template>
+  </v-card>
+</template>
+
+<script>
+export default {
+  name: "DoggoCard",
+
+  data: () => ({
+    imgError: false
+  }),
+  props: {
+    dog: {
+      type: Object,
+      required: true
+    },
+    parentBreed: {
+      type: String
+    }
+  },
+  methods: {
+    openModal() {
+      // can't open modal for a wrong img
+      if (!this.imgError) {
+        this.$emit("openModal", this.dog.img);
+      }
+    },
+    onErrorImg() {
+      this.imgError = true;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.link {
+  color: black;
+  text-decoration: none;
+}
+.imgText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+}
+</style>
