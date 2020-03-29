@@ -1,5 +1,8 @@
 # doggos-gallery
 
+## Live-version
+Check-out the live version [here](https://doggos-gallery.herokuapp.com/)
+
 ## Prerequisites
 Make sure you have npm installed by running
 ```
@@ -23,8 +26,7 @@ Compiles and minifies for production
 ```
 npm run build
 ```
-Preview production build using a Node.js static file server
+Run a production build using the simple Node.js server in the repository
 ```
-npm install -g serve
-serve -s dist
+node server.js
 ```
