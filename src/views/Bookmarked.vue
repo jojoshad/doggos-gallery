@@ -34,9 +34,7 @@
         </v-col>
       </template>
     </v-row>
-    <v-row v-else>
-      Empty
-    </v-row>
+    <EmptyDataSection v-else />
     <v-dialog v-model="dialog.show" max-width="800px">
       <DialogContent
         :doggoPicture="dialog.data"
@@ -49,6 +47,7 @@
 <script>
 import DoggoCard from "@/components/DoggoCard";
 import DialogContent from "@/components/DialogContent";
+import EmptyDataSection from "@/components/EmptyDataSection";
 import dogData from "@/mixins/dogDataMixin";
 import localStorageMixin from "@/mixins/localStorageMixin";
 
@@ -66,7 +65,8 @@ export default {
   },
   components: {
     DoggoCard,
-    DialogContent
+    DialogContent,
+    EmptyDataSection
   },
   methods: {
     clearBookmarks() {

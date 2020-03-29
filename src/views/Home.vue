@@ -18,12 +18,15 @@
           hint="Search for your favorite doggo!"
           placeholder="Search"
           solo
-          clearable
         ></v-text-field>
       </v-col>
     </v-row>
-    <v-row>
-      <DoggosGridGallery :breedsList="filteredBreeds" />
+    <v-row justify="center">
+      <DoggosGridGallery
+        v-if="filteredBreeds.length"
+        :breedsList="filteredBreeds"
+      />
+      <EmptyDataSection v-else />
     </v-row>
   </v-container>
 </template>
@@ -31,11 +34,13 @@
 <script>
 // @ is an alias to /src
 import DoggosGridGallery from "@/components/DoggosGridGallery.vue";
+import EmptyDataSection from "@/components/EmptyDataSection";
 
 export default {
   name: "Home",
   components: {
-    DoggosGridGallery
+    DoggosGridGallery,
+    EmptyDataSection
   },
   data: () => ({
     breedsList: undefined,
