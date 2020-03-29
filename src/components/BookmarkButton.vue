@@ -12,10 +12,11 @@
 </template>
 
 <script>
+import localStorageMixin from "@/mixins/localStorageMixin";
+
 export default {
   data() {
     return {
-      bookmarks: this.$store.state.bookmarks,
       bookmarked: this.$store.getters.isBookmarked(this.doggoPicture)
     };
   },
@@ -34,7 +35,7 @@ export default {
   },
   methods: {
     switchBookmarkState() {
-      if (!this.bookmarks.includes(this.doggoPicture)) {
+      if (!this.bookmarked) {
         this.$store.commit("addBookmark", this.doggoPicture);
         this.bookmarked = true;
       } else {
@@ -42,13 +43,9 @@ export default {
         this.bookmarked = false;
       }
       this.saveBookmarks();
-    },
-    saveBookmarks() {
-      const parsed = JSON.stringify(this.bookmarks);
-      // update local storage
-      localStorage.setItem("bookmarks", parsed);
     }
-  }
+  },
+  mixins: [localStorageMixin]
 };
 </script>
 

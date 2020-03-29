@@ -1,24 +1,30 @@
 # doggos-gallery
 
+## Prerequisites
+Make sure you have npm installed by running
+```
+npm -v
+```
+If not install the latest version of node
+
 ## Project setup
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Run as development version
+Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Run as production version
+Compiles and minifies for production
 ```
 npm run build
 ```
-
-### Lints and fixes files
+Preview production build using a Node.js static file server
 ```
-npm run lint
+npm install -g serve
+serve -s dist
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

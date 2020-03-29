@@ -23,6 +23,16 @@
         </v-row>
       </template>
     </v-img>
+    <!-- optional delete button -->
+    <v-btn
+      v-if="deletable"
+      class="deleteIcon"
+      color="white"
+      icon
+      @click="emitDelete()"
+    >
+      <v-icon>mdi-delete</v-icon>
+    </v-btn>
 
     <template v-if="dog.name">
       <router-link
@@ -65,6 +75,9 @@ export default {
     },
     parentBreed: {
       type: String
+    },
+    deletable: {
+      type: Boolean
     }
   },
   methods: {
@@ -76,6 +89,9 @@ export default {
     },
     onErrorImg() {
       this.imgError = true;
+    },
+    emitDelete() {
+      this.$emit("deleteItem", this.dog.img);
     }
   }
 };
@@ -95,5 +111,10 @@ export default {
   font-size: 20px;
   font-weight: bold;
   text-decoration: none;
+}
+.deleteIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 </style>

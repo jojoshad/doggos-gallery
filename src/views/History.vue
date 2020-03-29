@@ -7,50 +7,70 @@
         Clear History
       </v-btn>
     </div>
-    <v-row>
-      <template v-for="(dogPicture, index) in history">
+    <v-row v-if="history.length">
+      <template v-for="(dogPicture, index) in [...history].reverse()">
         <v-col v-if="dogPicture" :key="index" cols="12" sm="6" md="4" lg="3">
-          <v-card class="mx-auto">
-            <v-img
-              :src="dogPicture"
-              :alt="'dog-' + index"
-              height="300px"
-            ></v-img>
-          </v-card>
+          <DoggoCard
+            :dog="getDogPicture(dogPicture)"
+            deletable
+            @openModal="setDialog"
+            @deleteItem="deleteFromHistory"
+          />
         </v-col>
       </template>
     </v-row>
+    <EmptyDataSection v-else />
+    <v-dialog v-model="dialog.show" max-width="800px">
+      <DialogContent
+        :doggoPicture="dialog.data"
+        @closeModal="dialog.show = false"
+      />
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
+import DoggoCard from "@/components/DoggoCard";
+import DialogContent from "@/components/DialogContent";
+import EmptyDataSection from "@/components/EmptyDataSection";
+import dogData from "@/mixins/dogDataMixin";
+import localStorageMixin from "@/mixins/localStorageMixin";
+
 export default {
   name: "History",
   data() {
     return {
-      history: undefined
+      history: this.$store.state.history,
+      dialog: {
+        show: false,
+        data: undefined
+      }
     };
   },
-  components: {},
-  mounted() {
-    if (localStorage.getItem("history")) {
-      try {
-        this.history = JSON.parse(localStorage.getItem("history"));
-      } catch (e) {
-        localStorage.removeItem("history");
-      }
-    }
+  components: {
+    DoggoCard,
+    DialogContent,
+    EmptyDataSection
   },
   methods: {
     clearHistory() {
-      if (this.history) {
-        // clear component data
-        this.history.splice(0);
+      if (this.$store.state.history) {
+        // clear app data
+        this.$store.commit("clearHistory");
         // clear local storage
         localStorage.removeItem("history");
       }
+    },
+    deleteFromHistory(dogPicture) {
+      this.$store.commit("removeFromHistory", dogPicture);
+      this.saveHistory();
+    },
+    setDialog(dogPicture) {
+      this.dialog.show = true;
+      this.dialog.data = dogPicture;
     }
-  }
+  },
+  mixins: [dogData, localStorageMixin]
 };
 </script>
 
