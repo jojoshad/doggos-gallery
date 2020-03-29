@@ -22,10 +22,10 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <DoggosGridGallery
-        v-if="filteredBreeds.length"
-        :breedsList="filteredBreeds"
-      />
+      <template v-if="filteredBreeds.length">
+        <DoggosGridGallery :breedsList="breedsToDisplay" />
+        <v-pagination v-model="page" :length="pagesCount"></v-pagination>
+      </template>
       <EmptyDataSection v-else />
     </v-row>
   </v-container>
@@ -45,12 +45,30 @@ export default {
   data: () => ({
     breedsList: undefined,
     loading: true,
-    filter: ""
-    // loading: this.$store.state.loading
+    filter: "",
+    page: 1,
+    amountPerPage: 16
   }),
+  watch: {
+    // when filter changes => reset pagination
+    filter: function() {
+      this.page = 1;
+    }
+  },
   computed: {
     filteredBreeds: function() {
       return this.breedsList.filter(breed => breed.includes(this.filter));
+    },
+    pagesCount: function() {
+      return Math.ceil(this.filteredBreeds.length / this.amountPerPage);
+    },
+    breedsToDisplay: function() {
+      var breedsToDisplay = this.filteredBreeds.filter(
+        (breed, index) =>
+          index >= (this.page - 1) * this.amountPerPage &&
+          index < this.page * this.amountPerPage
+      );
+      return breedsToDisplay;
     }
   },
   mounted() {

@@ -8,13 +8,9 @@ export default new Vuex.Store({
   state: {
     breedsList: undefined,
     bookmarks: undefined,
-    history,
-    loading: false
+    history
   },
   mutations: {
-    setLoading(state, flag) {
-      state.loading = flag;
-    },
     setBreedsList(state, breedsList) {
       state.breedsList = breedsList;
     },

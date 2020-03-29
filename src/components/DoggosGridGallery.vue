@@ -86,6 +86,11 @@ export default {
       if (Object.keys(newPictures).length === this.breedsList.length) {
         this.loading = false;
       }
+    },
+    breedsList: function() {
+      this.breedsList.forEach(breed => {
+        this.getRandomPictureFromBreed(breed);
+      });
     }
   },
   methods: {
