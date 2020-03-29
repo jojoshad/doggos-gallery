@@ -25,15 +25,23 @@
     <v-row v-if="bookmarks.length">
       <template v-for="(dogPicture, index) in [...bookmarks].reverse()">
         <v-col :key="index" cols="12" sm="6" md="4" lg="3">
-          <DoggoCard :dog="getDogPicture(dogPicture)" deletable @openModal="setDialog" @deleteItem="deleteBookmark" />
+          <DoggoCard
+            :dog="getDogPicture(dogPicture)"
+            deletable
+            @openModal="setDialog"
+            @deleteItem="deleteBookmark"
+          />
         </v-col>
       </template>
     </v-row>
     <v-row v-else>
       Empty
     </v-row>
-    <v-dialog v-model="dialog.show" max-width="500px">
-      <DialogContent :doggoPicture="dialog.data" />
+    <v-dialog v-model="dialog.show" max-width="800px">
+      <DialogContent
+        :doggoPicture="dialog.data"
+        @closeModal="dialog.show = false"
+      />
     </v-dialog>
   </v-container>
 </template>

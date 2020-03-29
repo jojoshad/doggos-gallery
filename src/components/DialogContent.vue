@@ -1,8 +1,13 @@
 <template>
   <v-card class="cardContainer">
-    <v-img :src="doggoPicture" alt="doggo">
-      <BookmarkButton :doggoPicture="doggoPicture" class="bookmarkBtn" />
-    </v-img>
+    <div>
+      <v-img :src="doggoPicture" alt="doggo" max-height="90vh">
+        <BookmarkButton :doggoPicture="doggoPicture" class="bookmarkBtn" />
+      </v-img>
+      <v-btn class="closeIcon" color="white" icon @click="closeModal">
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+    </div>
   </v-card>
 </template>
 
@@ -20,6 +25,11 @@ export default {
     doggoPicture: {
       type: String,
       required: true
+    }
+  },
+  methods: {
+    closeModal() {
+      this.$emit("closeModal");
     }
   }
 };
@@ -41,6 +51,18 @@ export default {
     left: 50%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
+  }
+
+  .closeIcon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+
+    i {
+      font-size: 30px;
+    }
   }
 }
 </style>

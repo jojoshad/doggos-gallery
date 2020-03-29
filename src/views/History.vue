@@ -22,8 +22,11 @@
     <v-row v-else>
       Empty
     </v-row>
-    <v-dialog v-model="dialog.show" max-width="500px">
-      <DialogContent :doggoPicture="dialog.data" />
+    <v-dialog v-model="dialog.show" max-width="800px">
+      <DialogContent
+        :doggoPicture="dialog.data"
+        @closeModal="dialog.show = false"
+      />
     </v-dialog>
   </v-container>
 </template>

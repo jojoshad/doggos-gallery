@@ -86,7 +86,6 @@ export default new Vuex.Store({
     loadHistory({ commit }) {
       if (localStorage.getItem("history")) {
         try {
-          console.log("wesh");
           commit("setHistory", JSON.parse(localStorage.getItem("history")));
         } catch (e) {
           localStorage.removeItem("history");
