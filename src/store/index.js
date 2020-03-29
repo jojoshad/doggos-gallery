@@ -60,15 +60,9 @@ export default new Vuex.Store({
   },
   actions: {
     async loadBreeds({ commit }) {
-      const breedsList = await dogApi
-        .get("breeds/list")
-        .then(response => {
-          return response.data.message;
-        })
-        .catch(error => console.log(error));
-      // .finally(() => {
-      //   commit("setLoading", false);
-      // });
+      const breedsList = await dogApi.get("breeds/list").then(response => {
+        return response.data.message;
+      });
 
       commit("setBreedsList", breedsList);
     },

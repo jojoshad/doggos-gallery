@@ -101,8 +101,7 @@ export default {
         .then(response => {
           this.$set(this.breedsPictures, breed, response.data.message);
         })
-        .catch(error => {
-          console.log(error);
+        .catch(() => {
           this.$set(this.breedsPictures, breed, undefined);
         });
     },

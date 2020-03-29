@@ -71,9 +71,6 @@ export default {
         .then(response => {
           this.pictures = response.data.message;
         })
-        .catch(error => {
-          console.log(error);
-        })
         .finally((this.loading = false));
     },
     title: function(name) {

@@ -77,7 +77,6 @@ export default {
           this.subbreeds = response.data.message;
         }
       })
-      .catch(error => console.log(error))
       .finally(() => (this.loading = false));
   },
   methods: {
@@ -86,9 +85,6 @@ export default {
         .get(`breed/${this.breed}/images/random/${amount}`)
         .then(response => {
           this.breedPictures = response.data.message;
-        })
-        .catch(error => {
-          console.log(error);
         })
         .finally((this.loading = false));
     }
