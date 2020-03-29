@@ -56,7 +56,8 @@ export default new Vuex.Store({
         return false;
       }
       return state.breedsList.includes(breed);
-    }
+    },
+    bookmarkCount: state => (state.bookmarks ? state.bookmarks.length : 0)
   },
   actions: {
     async loadBreeds({ commit }) {

@@ -19,6 +19,11 @@
             </template>
           </v-expansion-panel-header>
           <v-expansion-panel-content>
+            <v-row justify="center">
+              <div class="refreshBtnContainer">
+                <NewBatchButton @getNewBatch="getNewBatch" />
+              </div>
+            </v-row>
             <v-row>
               <DoggosGridGallery
                 v-if="breedPictures.length"
@@ -33,15 +38,28 @@
       <h1>{{ title }} subbreeds</h1>
       <template v-if="subbreeds">
         <DoggosGridGallery :parentBreed="breed" :breedsList="subbreeds" />
-        <router-view :key="$route.path" :parentBreed="breed" />
+        <router-view
+          :key="$route.path"
+          :parentBreed="breed"
+          @showSnackBar="snackbar = true"
+        />
       </template>
       <h2 class="emptySub" v-else>No subbreeds for {{ breed }}</h2>
     </section>
+
+    <!-- Info snackbar in case of useless refresh -->
+    <v-snackbar v-model="snackbar" color="primary" right :timeout="4000" top>
+      Sorry, that's it for this doggo!
+      <v-btn dark text @click="snackbar = false">
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
 import DoggosGridGallery from "@/components/DoggosGridGallery";
+import NewBatchButton from "@/components/NewBatchButton";
 
 export default {
   data() {
@@ -49,7 +67,8 @@ export default {
       breedPictures: [],
       subbreeds: undefined,
       loading: true,
-      amount: 12
+      amount: 12,
+      snackbar: false
     };
   },
   props: {
@@ -59,7 +78,8 @@ export default {
     }
   },
   components: {
-    DoggosGridGallery
+    DoggosGridGallery,
+    NewBatchButton
   },
   computed: {
     title: function() {
@@ -68,7 +88,7 @@ export default {
   },
   mounted() {
     // fetch pictures from component to let it decide the amount
-    this.getRandomPictures(this.amount);
+    this.getRandomPictures();
 
     this.$dogApi
       .get(`/breed/${this.breed}/list`)
@@ -80,13 +100,20 @@ export default {
       .finally(() => (this.loading = false));
   },
   methods: {
-    getRandomPictures(amount) {
+    getRandomPictures() {
       this.$dogApi
-        .get(`breed/${this.breed}/images/random/${amount}`)
+        .get(`breed/${this.breed}/images/random/${this.amount}`)
         .then(response => {
           this.breedPictures = response.data.message;
         })
         .finally((this.loading = false));
+    },
+    getNewBatch() {
+      if (this.breedPictures.length < this.amount) {
+        this.snackbar = true;
+      } else {
+        this.getRandomPictures();
+      }
     }
   }
 };
@@ -107,5 +134,8 @@ export default {
 }
 .emptySub {
   text-align: center;
+}
+.refreshBtnContainer {
+  padding: 40px 0;
 }
 </style>
