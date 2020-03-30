@@ -87,9 +87,11 @@ export default {
         this.loading = false;
       }
     },
-    breedsList: function() {
+    breedsList: function(newList, oldList) {
       this.breedsList.forEach(breed => {
-        this.getRandomPictureFromBreed(breed);
+        if (!oldList.includes(breed)) {
+          this.getRandomPictureFromBreed(breed);
+        }
       });
     }
   },
