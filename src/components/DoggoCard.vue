@@ -42,6 +42,7 @@
           name: 'SubbreedPage',
           params: { subbreed: dog.name, parent: parentBreed }
         }"
+        @click.native="subbreedSelected()"
       >
         <v-card-title>
           {{ dog.name }}
@@ -92,6 +93,9 @@ export default {
     },
     emitDelete() {
       this.$emit("deleteItem", this.dog.img);
+    },
+    subbreedSelected() {
+      this.$root.$emit("subbreed_selected");
     }
   }
 };

@@ -47,7 +47,7 @@
 <script>
 import DoggoCard from "@/components/DoggoCard";
 import DialogContent from "@/components/DialogContent";
-import EmptyDataSection from "@/components/EmptyDataSection";
+import EmptyDataSection from "@/components/VEmptyDataSection";
 import dogData from "@/mixins/dogDataMixin";
 import localStorageMixin from "@/mixins/localStorageMixin";
 

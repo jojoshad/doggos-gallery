@@ -42,7 +42,7 @@
 <script>
 import DoggoCard from "@/components/DoggoCard";
 import DialogContent from "@/components/DialogContent";
-import EmptyDataSection from "@/components/EmptyDataSection";
+import EmptyDataSection from "@/components/VEmptyDataSection";
 import dogData from "@/mixins/dogDataMixin";
 import localStorageMixin from "@/mixins/localStorageMixin";
 import MugenScroll from "vue-mugen-scroll";
@@ -51,9 +51,9 @@ export default {
   name: "History",
   data() {
     return {
-      history: this.$store.state.history.reverse(),
+      history: [...this.$store.state.history].reverse(),
       amount: 12,
-      toDisplay: this.$store.state.history.slice(0, 12),
+      toDisplay: [],
       dialog: {
         show: false,
         data: undefined
@@ -67,6 +67,10 @@ export default {
     EmptyDataSection,
     MugenScroll
   },
+  mounted() {
+    // instantiate the data to display in template
+    this.toDisplay = this.history.slice(0, this.amount);
+  },
   methods: {
     clearHistory() {
       if (this.$store.state.history) {
@@ -74,30 +78,44 @@ export default {
         this.$store.commit("clearHistory");
         // clear local storage
         localStorage.removeItem("history");
+        // remove from component data
+        this.history = [];
+        // adapt template
+        this.toDisplay = [];
       }
     },
     deleteFromHistory(dogPicture) {
+      // clear from app data
       this.$store.commit("removeFromHistory", dogPicture);
+      // clear from local storage
       this.saveHistory();
+      // remove from component data
+      this.history = this.history.filter(item => item !== dogPicture);
+      // adapt template
+      this.replacePicture(dogPicture);
+    },
+    replacePicture(dogPicture) {
+      // remove in template
+      this.toDisplay = this.toDisplay.filter(item => item !== dogPicture);
+      // replace with a new one from history
+      this.addPictures(1);
     },
     setDialog(dogPicture) {
       this.dialog.show = true;
       this.dialog.data = dogPicture;
     },
-    addPictures() {
-      this.loading = true;
-      this.$set(
-        this.toDisplay,
+    addPictures(amount = this.amount) {
+      if (this.toDisplay.length < this.history.length) {
+        this.loading = true;
         this.toDisplay.push.apply(
           this.toDisplay,
-          this.history.filter(
-            (item, index) =>
-              index >= this.toDisplay.length &&
-              index < this.toDisplay.length + this.amount
+          this.history.slice(
+            this.toDisplay.length,
+            this.toDisplay.length + amount
           )
-        )
-      );
-      this.loading = false;
+        );
+        this.loading = false;
+      }
     }
   },
   mixins: [dogData, localStorageMixin]

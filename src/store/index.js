@@ -53,7 +53,8 @@ export default new Vuex.Store({
       }
       return state.breedsList.includes(breed);
     },
-    bookmarkCount: state => (state.bookmarks ? state.bookmarks.length : 0)
+    bookmarkCount: state => (state.bookmarks ? state.bookmarks.length : 0),
+    historyLength: state => (state.history ? state.history.length : 0)
   },
   actions: {
     async loadBreeds({ commit }) {

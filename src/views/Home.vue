@@ -34,7 +34,7 @@
 <script>
 // @ is an alias to /src
 import DoggosGridGallery from "@/components/DoggosGridGallery.vue";
-import EmptyDataSection from "@/components/EmptyDataSection";
+import EmptyDataSection from "@/components/VEmptyDataSection";
 
 export default {
   name: "Home",

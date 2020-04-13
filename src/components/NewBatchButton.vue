@@ -1,7 +1,16 @@
 <template>
-  <v-tooltip bottom>
+  <v-tooltip top>
     <template v-slot:activator="{ on }">
-      <v-btn v-on="on" color="primary" fab large @click="getNewBatch()">
+      <v-btn
+        v-on="on"
+        color="primary"
+        fab
+        large
+        bottom
+        right
+        fixed
+        @click="getNewBatch()"
+      >
         <v-icon class="btnIcon">mdi-refresh</v-icon>
       </v-btn>
     </template>
