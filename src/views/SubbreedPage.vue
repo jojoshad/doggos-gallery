@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loader">
+  <div v-if="loading" key="subbreed-loader" class="loader">
     <v-progress-circular
       :size="400"
       :width="8"
@@ -8,7 +8,7 @@
     ></v-progress-circular>
   </div>
 
-  <section v-else>
+  <section v-else key="subbreed-content">
     <div class="panel">
       <v-btn
         text
@@ -22,10 +22,10 @@
       <h1 class="panelTitle">{{ title(subbreed) }} {{ title(parentBreed) }}</h1>
     </div>
     <v-row v-if="pictures.length">
-      <DoggosGridGallery :pictures="pictures" />
+      <DoggosGridGallery key="subbreed-gallery" :pictures="pictures" />
     </v-row>
     <template v-else>
-      <h2>No pictures found for this subbreed</h2>
+      <h2 key="subbreed-empty">No pictures found for this subbreed</h2>
     </template>
   </section>
 </template>
@@ -34,13 +34,8 @@
 import DoggosGridGallery from "@/components/DoggosGridGallery";
 
 export default {
-  data() {
-    return {
-      pictures: [],
-      loading: true,
-      amount: 12
-    };
-  },
+  name: "SubbreedPage",
+
   props: {
     subbreed: {
       type: String,
@@ -51,13 +46,24 @@ export default {
       required: true
     }
   },
+
+  data() {
+    return {
+      pictures: [],
+      loading: true,
+      amount: 12
+    };
+  },
+
   components: {
     DoggosGridGallery
   },
+
   mounted() {
     // fetch pictures from component to let it decide the amount
     this.getRandomPictures();
   },
+
   methods: {
     getRandomPictures() {
       this.$dogApi
@@ -80,7 +86,6 @@ export default {
       return name.charAt(0).toUpperCase() + name.substring(1);
     },
     backToSubsList() {
-      console.log("back");
       this.$root.$emit("back_to_list");
     }
   }
@@ -88,6 +93,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.panel {
+  padding: 40px 0;
+  line-height: 50px;
+
+  .panelTitle {
+    padding: 0;
+    font-size: 30px;
+    text-align: center;
+  }
+}
 .loader {
   text-align: center;
 }

@@ -9,7 +9,14 @@
     </div>
     <v-row v-if="history.length">
       <template v-for="(dogPicture, index) in toDisplay">
-        <v-col v-if="dogPicture" :key="index" cols="12" sm="6" md="4" lg="3">
+        <v-col
+          v-if="dogPicture"
+          :key="`dog-${index}`"
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
+        >
           <DoggoCard
             :dog="getDogPicture(dogPicture)"
             deletable
@@ -24,15 +31,15 @@
           :handler="addPictures"
           :should-handle="!loading"
         >
-          <div v-if="loading">Loading...</div>
-          <div v-else>That's it!</div>
+          <div v-if="loading" key="scroll-loading">Loading...</div>
+          <div v-else key="scroll-end">That's it!</div>
         </mugen-scroll>
       </v-col>
     </v-row>
     <EmptyDataSection v-else />
     <v-dialog v-model="dialog.show" max-width="800px">
       <DialogContent
-        :doggoPicture="dialog.data"
+        :doggo-picture="dialog.data"
         @closeModal="dialog.show = false"
       />
     </v-dialog>
@@ -49,6 +56,16 @@ import MugenScroll from "vue-mugen-scroll";
 
 export default {
   name: "History",
+
+  components: {
+    DoggoCard,
+    DialogContent,
+    EmptyDataSection,
+    MugenScroll
+  },
+
+  mixins: [dogData, localStorageMixin],
+
   data() {
     return {
       history: [...this.$store.state.history].reverse(),
@@ -61,16 +78,12 @@ export default {
       loading: false
     };
   },
-  components: {
-    DoggoCard,
-    DialogContent,
-    EmptyDataSection,
-    MugenScroll
-  },
+
   mounted() {
     // instantiate the data to display in template
     this.toDisplay = this.history.slice(0, this.amount);
   },
+
   methods: {
     clearHistory() {
       if (this.$store.state.history) {
@@ -117,8 +130,7 @@ export default {
         this.loading = false;
       }
     }
-  },
-  mixins: [dogData, localStorageMixin]
+  }
 };
 </script>
 

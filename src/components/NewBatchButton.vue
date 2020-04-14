@@ -20,6 +20,8 @@
 
 <script>
 export default {
+  name: "NewBatchButton",
+
   methods: {
     getNewBatch() {
       this.$emit("getNewBatch");

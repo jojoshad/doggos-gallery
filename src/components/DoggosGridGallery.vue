@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <div v-if="loading" class="loader">
+    <div v-if="loading" key="gallery-loader" class="loader">
       <v-progress-circular
         :size="400"
         :width="8"
@@ -9,19 +9,19 @@
       ></v-progress-circular>
     </div>
 
-    <v-row v-else>
+    <v-row v-else key="gallery-content">
       <template v-if="pictures">
-        <template v-for="picture in pictures">
-          <v-col :key="picture" cols="12" sm="6" md="4" lg="3">
+        <template v-for="(picture, index) in pictures">
+          <v-col :key="`dog-${index}`" cols="12" sm="6" md="4" lg="3">
             <DoggoCard :dog="getDogPicture(picture)" @openModal="setDialog" />
           </v-col>
         </template>
       </template>
       <template v-else>
-        <template v-for="breed in breedsList">
-          <v-col :key="breed" cols="12" sm="6" md="4" lg="3">
+        <template v-for="(breed, index) in breedsList">
+          <v-col :key="`breed-${index}`" cols="12" sm="6" md="4" lg="3">
             <DoggoCard
-              :parentBreed="parentBreed"
+              :parent-breed="parentBreed"
               :dog="getDogData(breed)"
               @openModal="setDialog"
             />
@@ -31,7 +31,7 @@
     </v-row>
     <v-dialog v-model="dialog.show" max-width="800px">
       <DialogContent
-        :doggoPicture="dialog.data"
+        :doggo-picture="dialog.data"
         @closeModal="dialog.show = false"
       />
     </v-dialog>
@@ -47,14 +47,13 @@ import localStorageMixin from "@/mixins/localStorageMixin";
 export default {
   name: "DoggosGridGallery",
 
-  data: () => ({
-    breedsPictures: {},
-    loading: true,
-    dialog: {
-      show: false,
-      data: undefined
-    }
-  }),
+  components: {
+    DialogContent,
+    DoggoCard
+  },
+
+  mixins: [dogData, localStorageMixin],
+
   props: {
     breedsList: {
       type: Array
@@ -67,19 +66,16 @@ export default {
       type: Array
     }
   },
-  components: {
-    DialogContent,
-    DoggoCard
-  },
-  mounted() {
-    if (!this.pictures) {
-      this.breedsList.forEach(breed => {
-        this.getRandomPictureFromBreed(breed);
-      });
-    } else {
-      this.loading = false;
+
+  data: () => ({
+    breedsPictures: {},
+    loading: true,
+    dialog: {
+      show: false,
+      data: undefined
     }
-  },
+  }),
+
   watch: {
     // whenever breedsPictures changes, this function will run
     breedsPictures: function(newPictures) {
@@ -95,6 +91,17 @@ export default {
       });
     }
   },
+
+  mounted() {
+    if (!this.pictures) {
+      this.breedsList.forEach(breed => {
+        this.getRandomPictureFromBreed(breed);
+      });
+    } else {
+      this.loading = false;
+    }
+  },
+
   methods: {
     getRandomPictureFromBreed(breed) {
       this.$dogApi
@@ -124,8 +131,7 @@ export default {
       }
       this.saveHistory();
     }
-  },
-  mixins: [dogData, localStorageMixin]
+  }
 };
 </script>
 

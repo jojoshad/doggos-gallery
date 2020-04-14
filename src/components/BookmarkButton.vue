@@ -1,13 +1,15 @@
 <template>
   <v-btn
-    class="btn"
     :key="doggoPicture"
+    class="btn"
     icon
     :color="bookmarked ? 'white' : 'pink'"
     @click="switchBookmarkState()"
   >
-    <v-icon class="btnIcon" v-if="bookmarked">mdi-check</v-icon>
-    <v-icon class="btnIcon" v-else>mdi-heart</v-icon>
+    <v-icon v-if="bookmarked" key="bookmarked" class="btnIcon">
+      mdi-check
+    </v-icon>
+    <v-icon v-else key="not-bookmarked" class="btnIcon">mdi-heart</v-icon>
   </v-btn>
 </template>
 
@@ -15,17 +17,23 @@
 import localStorageMixin from "@/mixins/localStorageMixin";
 
 export default {
-  data() {
-    return {
-      bookmarked: this.$store.getters.isBookmarked(this.doggoPicture)
-    };
-  },
+  name: "BookmarkButton",
+
+  mixins: [localStorageMixin],
+
   props: {
     doggoPicture: {
       type: String,
       required: true
     }
   },
+
+  data() {
+    return {
+      bookmarked: this.$store.getters.isBookmarked(this.doggoPicture)
+    };
+  },
+
   watch: {
     // whenever props changes (dialog is shown),
     // this function will run (bookmark state is reseted)
@@ -33,6 +41,7 @@ export default {
       this.bookmarked = this.$store.getters.isBookmarked(this.doggoPicture);
     }
   },
+
   methods: {
     switchBookmarkState() {
       if (!this.bookmarked) {
@@ -44,8 +53,7 @@ export default {
       }
       this.saveBookmarks();
     }
-  },
-  mixins: [localStorageMixin]
+  }
 };
 </script>
 

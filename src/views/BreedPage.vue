@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loader">
+  <div v-if="loading" key="breed-loader" class="loader">
     <v-progress-circular
       :size="400"
       :width="8"
@@ -8,7 +8,7 @@
     ></v-progress-circular>
   </div>
 
-  <div v-else>
+  <div v-else key="breed-page">
     <v-container>
       <v-tabs v-model="tab" grow>
         <v-tabs-slider></v-tabs-slider>
@@ -46,12 +46,12 @@
                   <h1 class="panelTitle">{{ title }} subbreeds</h1>
                 </div>
                 <DoggosGridGallery
-                  :parentBreed="breed"
-                  :breedsList="subbreeds"
+                  :parent-breed="breed"
+                  :breeds-list="subbreeds"
                 />
               </template>
             </template>
-            <h2 class="emptySub" v-else>No subbreeds for {{ breed }}</h2>
+            <h2 v-else class="emptySub">No subbreeds for {{ breed }}</h2>
           </section>
         </v-tab-item>
       </v-tabs>
@@ -75,6 +75,20 @@ import DoggosGridGallery from "@/components/DoggosGridGallery";
 import NewBatchButton from "@/components/NewBatchButton";
 
 export default {
+  name: "BreedPage",
+
+  props: {
+    breed: {
+      type: String,
+      required: true
+    }
+  },
+
+  components: {
+    DoggosGridGallery,
+    NewBatchButton
+  },
+
   data() {
     return {
       breedPictures: [],
@@ -86,16 +100,7 @@ export default {
       subbreedSection: false
     };
   },
-  props: {
-    breed: {
-      type: String,
-      required: true
-    }
-  },
-  components: {
-    DoggosGridGallery,
-    NewBatchButton
-  },
+
   computed: {
     displayRefreshBtn() {
       return this.subbreedSection || this.tab === "tab-gallery";
@@ -104,6 +109,7 @@ export default {
       return this.breed.charAt(0).toUpperCase() + this.breed.substring(1);
     }
   },
+
   mounted() {
     // fetch pictures from component to let it decide the amount
     this.getRandomPictures();
@@ -136,6 +142,7 @@ export default {
         .catch(() => {});
     });
   },
+
   methods: {
     getRandomPictures() {
       this.$dogApi
@@ -163,7 +170,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .panel {
   padding: 40px 0;
   line-height: 50px;

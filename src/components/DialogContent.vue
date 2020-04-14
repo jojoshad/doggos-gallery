@@ -2,7 +2,7 @@
   <v-card class="cardContainer">
     <div>
       <v-img :src="doggoPicture" alt="doggo" max-height="90vh">
-        <BookmarkButton :doggoPicture="doggoPicture" class="bookmarkBtn" />
+        <BookmarkButton :doggo-picture="doggoPicture" class="bookmarkBtn" />
       </v-img>
       <v-btn class="closeIcon" color="white" icon @click="closeModal">
         <v-icon>mdi-close</v-icon>
@@ -17,16 +17,19 @@ import BookmarkButton from "./BookmarkButton";
 export default {
   name: "DialogContent",
 
-  data: () => ({}),
   components: {
     BookmarkButton
   },
+
   props: {
     doggoPicture: {
       type: String,
       required: true
     }
   },
+
+  data: () => ({}),
+
   methods: {
     closeModal() {
       this.$emit("closeModal");
