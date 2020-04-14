@@ -11,10 +11,11 @@
         <v-row class="fill-height ma-0" align="center" justify="center">
           <v-progress-circular
             v-if="!imgError"
+            key="image-loading"
             indeterminate
             color="blue"
           ></v-progress-circular>
-          <div v-else>
+          <div v-else key="image-failed">
             <img :src="require(`@/assets/doge.jpg`)" alt="doge" />
             <span class="imgText">
               Couldn't load
@@ -37,11 +38,13 @@
     <template v-if="dog.name">
       <router-link
         v-if="parentBreed"
+        key="subbreed-link"
         class="link"
         :to="{
           name: 'SubbreedPage',
           params: { subbreed: dog.name, parent: parentBreed }
         }"
+        @click.native="subbreedSelected()"
       >
         <v-card-title>
           {{ dog.name }}
@@ -50,6 +53,7 @@
 
       <router-link
         v-else
+        key="breed-link"
         class="link"
         :to="{ name: 'BreedPage', params: { breed: dog.name } }"
       >
@@ -65,9 +69,6 @@
 export default {
   name: "DoggoCard",
 
-  data: () => ({
-    imgError: false
-  }),
   props: {
     dog: {
       type: Object,
@@ -80,6 +81,11 @@ export default {
       type: Boolean
     }
   },
+
+  data: () => ({
+    imgError: false
+  }),
+
   methods: {
     openModal() {
       // can't open modal for a wrong img
@@ -92,6 +98,9 @@ export default {
     },
     emitDelete() {
       this.$emit("deleteItem", this.dog.img);
+    },
+    subbreedSelected() {
+      this.$root.$emit("subbreed_selected");
     }
   }
 };

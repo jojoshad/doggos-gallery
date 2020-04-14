@@ -34,6 +34,8 @@
 
 <script>
 export default {
+  name: "TheNavigation",
+
   data() {
     return {
       search: ""

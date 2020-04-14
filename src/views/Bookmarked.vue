@@ -22,9 +22,9 @@
         </v-card>
       </v-dialog>
     </div>
-    <v-row v-if="bookmarks.length">
+    <v-row v-if="bookmarks.length" key="bookmarks">
       <template v-for="(dogPicture, index) in [...bookmarks].reverse()">
-        <v-col :key="index" cols="12" sm="6" md="4" lg="3">
+        <v-col :key="`bookmark-${index}`" cols="12" sm="6" md="4" lg="3">
           <DoggoCard
             :dog="getDogPicture(dogPicture)"
             deletable
@@ -34,10 +34,10 @@
         </v-col>
       </template>
     </v-row>
-    <EmptyDataSection v-else />
+    <EmptyDataSection v-else key="empty" />
     <v-dialog v-model="dialog.show" max-width="800px">
       <DialogContent
-        :doggoPicture="dialog.data"
+        :doggo-picture="dialog.data"
         @closeModal="dialog.show = false"
       />
     </v-dialog>
@@ -47,12 +47,21 @@
 <script>
 import DoggoCard from "@/components/DoggoCard";
 import DialogContent from "@/components/DialogContent";
-import EmptyDataSection from "@/components/EmptyDataSection";
+import EmptyDataSection from "@/components/VEmptyDataSection";
 import dogData from "@/mixins/dogDataMixin";
 import localStorageMixin from "@/mixins/localStorageMixin";
 
 export default {
   name: "Bookmarked",
+
+  components: {
+    DoggoCard,
+    DialogContent,
+    EmptyDataSection
+  },
+
+  mixins: [dogData, localStorageMixin],
+
   data() {
     return {
       bookmarks: this.$store.state.bookmarks,
@@ -63,11 +72,7 @@ export default {
       }
     };
   },
-  components: {
-    DoggoCard,
-    DialogContent,
-    EmptyDataSection
-  },
+
   methods: {
     clearBookmarks() {
       if (this.$store.state.bookmarks) {
@@ -92,8 +97,7 @@ export default {
       }
       this.saveHistory();
     }
-  },
-  mixins: [dogData, localStorageMixin]
+  }
 };
 </script>
 

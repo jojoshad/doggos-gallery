@@ -23,10 +23,13 @@
     </v-row>
     <v-row justify="center">
       <template v-if="filteredBreeds.length">
-        <DoggosGridGallery :breedsList="breedsToDisplay" />
+        <DoggosGridGallery
+          key="breeds-gallery"
+          :breeds-list="breedsToDisplay"
+        />
         <v-pagination v-model="page" :length="pagesCount"></v-pagination>
       </template>
-      <EmptyDataSection v-else />
+      <EmptyDataSection v-else key="breeds-empty" />
     </v-row>
   </v-container>
 </template>
@@ -34,14 +37,16 @@
 <script>
 // @ is an alias to /src
 import DoggosGridGallery from "@/components/DoggosGridGallery.vue";
-import EmptyDataSection from "@/components/EmptyDataSection";
+import EmptyDataSection from "@/components/VEmptyDataSection";
 
 export default {
   name: "Home",
+
   components: {
     DoggosGridGallery,
     EmptyDataSection
   },
+
   data: () => ({
     breedsList: undefined,
     loading: true,
@@ -49,12 +54,7 @@ export default {
     page: 1,
     amountPerPage: 16
   }),
-  watch: {
-    // when filter changes => reset pagination
-    filter: function() {
-      this.page = 1;
-    }
-  },
+
   computed: {
     filteredBreeds: function() {
       return this.breedsList.filter(breed => breed.includes(this.filter));
@@ -71,6 +71,14 @@ export default {
       return breedsToDisplay;
     }
   },
+
+  watch: {
+    // when filter changes => reset pagination
+    filter: function() {
+      this.page = 1;
+    }
+  },
+
   mounted() {
     if (!this.$store.state.breedsList) {
       this.$store
